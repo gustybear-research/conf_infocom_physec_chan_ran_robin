@@ -1,0 +1,97 @@
+\documentclass[10pt, conference, letterpaper]{IEEEtran}
+\usepackage{geometry}
+\geometry{right=0.625in,top=0.75in,left=0.625in,bottom=1.0in}
+\usepackage{algorithm}
+\usepackage{cite}
+% \usepackage[backend=biber,style=ieee]{biblatex}
+% \addbibresource{refpaper.bib}
+% \addbibresource{references_y_zheng.bib}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{algorithmic}
+\usepackage{array}
+\usepackage{subcaption}
+\usepackage{gensymb}
+\usepackage{amssymb}
+%\usepackage{url}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{framed}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+%\usepackage{hyperref}
+%\usepackage{flushend}
+\pgfplotsset{compat=newest}
+%% the following commands are needed for some matlab2tikz features
+\usetikzlibrary{plotmarks}
+\usetikzlibrary{arrows.meta}
+\usepgfplotslibrary{patchplots}
+\usepackage{grffile}
+\usepackage{kbordermatrix}
+% \numberwithin{equation}{section}
+% \usepackage{hyperref}
+
+\def\yanjun#1{{\color{blue}\sf #1}}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{theorem}{Theorem}[section]
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\newenvironment{sequation}{\begin{equation}\small}{\end{equation}}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\newlength\tikzfigH
+\newlength\tikzfigW
+
+\usepackage{pgfplots}
+
+% axis style, ticks, etc
+
+\makeatletter
+\def\blfootnote{\gdef\@thefnmark{}\@footnotetext}
+\makeatother
+
+%\usepackage{epstopdf}
+\IEEEoverridecommandlockouts
+
+\begin{document}
+\title{ROBin:  Known-Plaintext Attack Resistant Orthogonal Blinding via  Channel Randomization }
+\author{\IEEEauthorblockN{Yanjun Pan\IEEEauthorrefmark{1} \quad
+Yao Zheng\IEEEauthorrefmark{2} \quad
+Ming Li\IEEEauthorrefmark{1}}
+\IEEEauthorblockA{\IEEEauthorrefmark{1}The University of Arizona, Tucson, AZ\\
+\IEEEauthorrefmark{2}University of Hawai`i at M\=anoa, Honolulu, HI\\
+Email: \IEEEauthorrefmark{1}\{yanjunpan,lim\}@email.arizona.edu \quad \IEEEauthorrefmark{2}yao.zheng@hawaii.edu }
+\thanks{This work is partly supported by NSF grants CNS-1619728, CNS-1564477, ONR grant N00014-16-1-2650, ARO grant W911NF-19-1-0050.}}
+
+\maketitle
+\begin{abstract}
+Orthogonal blinding based schemes for wireless physical layer security aim to achieve secure communication by injecting noise into channels orthogonal to the main channel and corrupting the eavesdropper's signal reception. These methods, albeit practical, have been proven vulnerable against multi-antenna eavesdroppers who can filter the message from the noise. The vulnerability is rooted in the fact that the main channel state remains static in spite of the noise injection, which allows an eavesdropper to estimate it promptly via known symbols and filter out the noise. Our proposed scheme leverages a reconfigurable antenna for Alice to rapidly change the channel state during transmission and a compressive sensing based algorithm for her to predict and cancel the changing effects for Bob. As a result, the communication between Alice and Bob remains clear, whereas randomized channel state prevents Eve from launching the known-plaintext attack. We formally analyze the security of the scheme against both single and multi-antenna eavesdroppers and identify its unique anti-eavesdropping properties due to the artificially created fast-changing channel. We conduct extensive simulations and real-world experiments to evaluate its performance. Empirical results show that our scheme can suppress Eve's attack success rate to the level of random guessing, even if she knows all the symbols transmitted through other antenna modes.
+\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+\input{Intro}
+\input{Relatedwork}
+\input{Model}
+\input{Physicallayersecurity}
+\input{Attack}
+\input{Scheme}
+\input{Theory}
+\input{Performance}
+\input{Conclusion}
+% \input{Appendix}
+
+% \printbibliography
+\bibliographystyle{IEEEtran}
+% \bibliography{refpaper,references_y_zheng}
+\bibliography{refpaper}
+\input{Appendix3}
+
+\end{document}

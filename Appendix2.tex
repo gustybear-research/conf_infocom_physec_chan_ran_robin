@@ -1,0 +1,113 @@
+\newpage
+\section*{Appendix}
+\begin{proof}
+Based on the Markov property of the wireless channel, we derive the conditional independence of the joint channel distribution under different time instance first, then simplify the calculation of conditional mutual information with the independence conditions.
+
+Recall the Markov property of the channels:
+\begin{equation*}
+\begin{split}
+& \Pr\left[h_{AB}\left(T, u(T)\right)\mid \mathcal{H}_{AB}(T-1)\right] = \\
+& \ \ \ \ \Pr\left[h_{AB}\left(T, u(T) \right) \mid h_{AB}\left(T-1, u(T-1)\right)\right].
+\end{split}
+\end{equation*}
+and
+\begin{equation*}
+\begin{split}
+& \Pr\left[h_{AB}\left(T,u(T)\right)\mid \mathcal{H}_{AE}(T)\right] = \\
+& \ \ \ \ \Pr\left[h_{AB}\left(T, u(T) \right) \mid h_{AE}\left(T, u(T)\right)\right]
+\end{split}
+\end{equation*}
+To simplify, we denote $X_1 = \mathcal{H}_{AB}(T-2,u(T-2))$, $X_2 = h_{AB}(T-1,u(T-1))$, $X_3 = h_{AB}(T,u(T))$, and similarly define $Y$ for channel A-E. Then the Markov property can be rewritten as:
+\begin{align*}
+    \Pr(X_3|X_1,X_2) & = \Pr(X_3|X_2)\\
+    \Pr(X_3|Y_1,Y_2,Y_3) & = \Pr(X_3|Y_3)
+\end{align*}
+and it is illustrated below:
+\begin{center}
+\begin{tabular}{ c c c c c}
+ $X_1$ & $\longrightarrow$ & $X_2$ & $\longrightarrow$ & $X_3$ \\ 
+ $\uparrow$ &  & $\uparrow$ &  & $\uparrow$ \\
+ $Y_1$ & $\longrightarrow$ & $Y_2$ & $\longrightarrow$ & $Y_3$
+\end{tabular}
+\end{center}
+Then we begin with
+\begin{subequations}
+    \begin{align*}
+        &\Pr(X_1,Y_1,X_3|X_2,Y_2,Y_3)\\
+        =&\Pr(X_3|X_2,Y_2,Y_3) \Pr(X_1,Y_1|X_2,Y_2,X_3,Y_3) \numberthis \label{eq9}
+    \end{align*}
+\end{subequations}
+\eqref{eq9} is obtained by expressing the joint probability with the conditional probability, then we focus on simplifying its last term, which is similar to:
+\begin{subequations}
+    \begin{align*}
+        &\Pr(X_3,Y_3|X_1,X_2,Y_1,Y_2)\\
+        =&\Pr(X_3|X_1,X_2,Y_1,Y_2)\Pr(Y_3|X_1,X_2,Y_1,Y_2,X_3) \numberthis \label{eq1}\\
+        =&\Pr(X_3|X_2)\Pr(Y_3|Y_2,X_3) \numberthis \label{eq2}\\
+        =&\Pr(X_3|X_2,Y_2)\Pr(Y_3|X_2,Y_2,X_3) \numberthis \label{eq2_1}\\
+        =&\Pr(X_3,Y_3|X_2,Y_2) \numberthis \label{eq2_2}\\
+    \end{align*}
+\end{subequations}
+Similarly, \eqref{eq1} is obtained by expressing the joint probability with the conditional probability, 
+% with Markov chains \eqref{eq:chain1} and \eqref{eq:chain2}, 
+with Markov property of the channels,
+it is further simplified to \eqref{eq2}. Then we can add more conditional independent variables in Markov chains and get \eqref{eq2_1}, which equals to \eqref{eq2_2}. \eqref{eq2_2} implies that given $(X_2,Y_2)$, $(X_1,Y_1)$ and $(X_3,Y_3)$ are conditionally independent. Then back to \eqref{eq9}, we have 
+\begin{subequations}
+    \begin{align*}
+        &\Pr(X_1,Y_1,X_3|X_2,Y_2,Y_3)\\
+        =&\Pr(X_3|X_2,Y_2,Y_3) \Pr(X_1,Y_1|X_2,Y_2,X_3,Y_3) \numberthis \label{eq9_1}\\
+        =&\Pr(X_3|X_2,Y_2,Y_3)\Pr(X_1,Y_1|X_2,Y_2) \numberthis \label{eq10}\\
+        =&\Pr(X_3|X_2,Y_2,Y_3)\Pr(X_1,Y_1|X_2,Y_2,Y_3) \numberthis \label{eq11}
+    \end{align*}
+\end{subequations}
+which means given $(X_2,Y_2,Y_3)$, $X_3$ and $(X_1,Y_1)$ are conditionally independent.
+When we reverse $X$, $Y$ back to the CSI, we have $h_{AB}\left(T,u(T)\right)$ conditionally independent from $\mathcal{H}_{ABE}(T-2)$ given $\delta H_{ABE}(T)$, where 
+\begin{align*}
+\mathcal{H}_{ABE}(T-2) = \left\{ \right. & \left. h_{AB}\left(T-2, u(T-2)\right), \right. \\
+& \left. h_{AE}\left(T-2, u(T-2)\right) \right. \}\\
+\delta \mathcal{H}_{ABE}(T) = \left\{ \right. & \left. h_{AB}\left(T-1, u(T-1)\right), \right. \\
+& \left. h_{AE}\left(T-1, u(T-1)\right), \right.\\
+& \left. h_{AE}\left(T, u(T)\right)\ \right\}
+\end{align*}
+Since $h_{AB}^{-1}(T,u(T))$ is a function of $h_{AB}(T,u(T))$, then the above conditional independence in still holds, which means that  $h_{AB}^{-1}\left(T,u(T)\right)$ and $\mathcal{H}_{ABE}(T-2)$ are conditionally independent given $\delta H_{ABE}(T)$,
+which can be written as:
+% \begin{align}
+% & \Pr\left[ \mathcal{H}_{ABE}(T-2), h_{AB}^{-1}\left(T,u(T)\right) | \delta \mathcal{H}_{ABE}(T) \right] = \nonumber \\
+% & \qquad \qquad \Pr\left[ \mathcal{H}_{ABE}(T-2) | \delta \mathcal{H}_{ABE}(T) \right] \nonumber \\ 
+% &\qquad \qquad \qquad \times \Pr\left[h_{AB}^{-1}\left(T,u(T)\right) | \delta \mathcal{H}_{ABE}(T) \right] \label{eq133}
+% \end{align}
+\begin{align}
+& \Pr\left[ h_{AB}^{-1}\left(T,u(T)\right) | \mathcal{H}_{AB}(T-1), \mathcal{H}_{AE}(T) \right] = \nonumber \\
+& \Pr\left[ h_{AB}^{-1}\left(T,u(T)\right) | \mathcal{H}_{ABE}(T-2), \delta \mathcal{H}_{ABE}(T) \right] = \nonumber \\
+& \Pr\left[ h_{AB}^{-1}\left(T,u(T)\right) | \delta \mathcal{H}_{ABE}(T) \right] \label{eq133}
+\end{align}
+To compute $I\left(\mathbf{D}_B(T);\mathbf{R}_E(T) \mid \right. \left. \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right)$, we consider $\Pr\left(\mathbf{D}_B(T);\hat{\mathbf{R}}_E(T) \mid \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right)$
+first, where $\hat{\mathbf{R}}_E(T) = h_{AB}^{-1}(\left(T,u(T)\right)  \mathbf{D}_B(T)$.
+
+\begin{subequations}
+    \begin{align*}
+        &\Pr\left(\mathbf{D}_B(T),\hat{\mathbf{R}}_E(T) \mid \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right)\\
+        = &\Pr\left(\mathbf{D}_B(T),h_{AB}^{-1}\left(T,u(T)\right)=\frac{\hat{\mathbf{R}}_E(T)}{\mathbf{D}_B(T)}\mid \mathcal{H}_{AB}(T-1), \mathcal{H}_{AE}(T)\right) \numberthis \label{eq13}\\
+        = &\Pr\left(\mathbf{D}_B(T)\mid \mathcal{H}_{AB}(T-1), \mathcal{H}_{AE}(T)\right) \\
+        &\times \Pr\left(h_{AB}^{-1}\left(T,u(T)\right)=\frac{\hat{\mathbf{R}}_E(T)}{\mathbf{D}_B(T)}\mid \mathcal{H}_{AB}(T-1), \mathcal{H}_{AE}(T)\right) \numberthis \label{eq14} \\
+        = &\Pr\left(\mathbf{D}_B(T)\mid \mathcal{H}_{ABE}(T)\right) \\
+        & \ \ \ \times \Pr\left(h_{AB}^{-1}\left(T,u(T)\right)=\frac{\hat{\mathbf{R}}_E(T)}{\mathbf{D}_B(T)}\mid \mathcal{H}_{ABE}(T)\right) \numberthis \label{eq15} \\
+        = & \Pr\left(\mathbf{D}_B(T),\hat{\mathbf{R}}_E(T) \mid \delta\mathcal{H}_{ABE}(T)\right) \numberthis \label{eq16}
+    \end{align*}
+\end{subequations}
+With the fact that messages are independent from all the CSI information, we can get \eqref{eq14}, and meanwhile get rid of $\mathcal{H}_{ABE}(T-2)$ from $\mathbf{D}_B$'s condition, which is the first term of \eqref{eq15}, and with \eqref{eq133} we get the second term of \eqref{eq15}. Then by converting conditional probability to joint probability, we get \eqref{eq16}. Since the noise term is independent from every term of above equations, we can add it into $\hat{\mathbf{R}}_E$ and get $\mathbf{R}_E$ while above results still holds. 
+
+So far, we have proved that 
+\begin{align*}
+    I\left(\mathbf{D}_B(T);\mathbf{R}_E(T) \mid \right. & \left. \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right) =  \nonumber \\
+    I\left(\mathbf{D}_B(T);\mathbf{R}_E(T) \mid \right. & \left. \delta \mathcal{H}_{ABE}(T)\right)
+\end{align*}
+for single antenna system. Next, we present the approach to extend it to MIMO. Note that, for the MIMO system, each element in the Markov chain becomes the channel matrix. Similarly,
+\begin{subequations}
+    \begin{align*}
+        &\Pr\left(\mathbf{D}_B(T),\hat{\mathbf{R}}_E(T) \mid \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right)\\
+        = &\Pr\left(\mathbf{D}_B(T),\mathbf{H}_{AB}^{-1}\left(T,u(T)\right)\in\mathbf{\Gamma}\mid \mathcal{H}_{AB}(T-1), \mathcal{H}_{AE}(T)\right) \numberthis \label{eq13}
+    \end{align*}
+\end{subequations}
+where $\mathbf{\Gamma} =\{\mathbf{H}_{AB}^{-1}\left(T,u(T)\right)\in\mathbf{\Gamma},\text{s.t.~} \hat{\mathbf{R}}_E(T) = \mathbf{H}_{AB}^{-1}\mathbf{D}_B\}$, which represents a set of matrices where its element is a possible solution for $\mathbf{H}_{AB}^{-1}\left(T,u(T)\right)$. Then we can eliminate $\mathcal{H}_{ABE}(T-2)$ with similar procedures from Eq. \eqref{eq14} to Eq. \eqref{eq16}.  
+
+\end{proof}

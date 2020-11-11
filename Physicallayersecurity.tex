@@ -1,0 +1,63 @@
+\section{Review of Orthogonal blinding}
+Orthogonal blinding is designed to achieve secure communication by injecting noise into channels orthogonal to the main channel and corrupt the eavesdropper's signal reception. Though it is not the best possible achievable scheme for physical layer security,  as it does not require \textit{a priori} key exchange nor full channel knowledge, orthogonal blinding has been widely considered as a promising candidate to provide confidentiality during wireless transmission. However, it has been proven vulnerable against multi-antenna eavesdropper capable of discerning the message from the noise. In this section, we provide a brief review of orthogonal blinding scheme and the cause of its vulnerabilities.
+
+\subsection{Transmitter-Side Precoding}
+The core technique behind orthogonal blinding is known as transmitter-side precoding. To achieve secure transmission, Alice stirs both message and artificial noise (AN) via precoding. So Bob receives the pure message, and Eve receives the mixture of the noise and message. Zero-forcing and orthogonal blinding are two physical layer security schemes to achieved by transmitter-side precoding. 
+
+In zero-forcing, Alice aims to transmit within the null-space of Eve's channel, which requires the full knowledge of Eve's channel. Such condition is not practical for a passive eavesdropper. While in orthogonal blinding, Alice needs only to know Bob's channel and transmits the AN in the null-space of Bob's channel to prevent eavesdroppers from extracting the data. Due to the orthogonality, Bob is not affected by the AN. But any receiver, whose channel is different from Bob's, receives a mixture of the message and AN. If the AN  in the mixture is strong, the receiver cannot recover the message.
+
+The channels orthogonal to Bob's can be computed with the Gram-Schmidt algorithm as mentioned in \cite{anand2012strobe,schulz2014practical,zheng2016profiling}. First, Alice computes the projection matrix:
+\begin{equation}
+    \mathbf{H}_p = \mathbf{H}_{AB}^H(\mathbf{H}_{AB}\mathbf{H}_{AB}^H)^{-1}\mathbf{H}_{AB}
+\end{equation}
+and randomly generates a complex uniform matrix $\mathbf{H}'_{AN}$ with dimension $(n_{a}-n_{b}) \times n_{a}$. Then the difference between $\mathbf{H}'_{AN}$ and the projection of $\mathbf{H}'_{AN}$ is:
+\begin{equation}
+    \mathbf{H}^{''}_{AN} = \mathbf{H}'_{AN}-\mathbf{H}'_{AN} \cdot \mathbf{H}_p
+\end{equation}
+by normalizing this difference, we can obtain $\mathbf{H}_{AN}$:
+\begin{equation}
+    \mathbf{H}_{AN} = \frac{\mathbf{H}^{''}_{AN}}{\| \mathbf{H}^{''}_{AN} \|}
+\end{equation}
+where each row in $\mathbf{H}_{AN}$ is orthogonal to any other row in itself and to every row in $\mathbf{H}_{AB}$.
+
+Next, Alice precodes the message ($\mathbf{D}_B$) and artificial noise ($\textbf{AN}$) with the pseudo-inverse of the matrix composed by $\mathbf{H}_{AB}$ and $\mathbf{H}_{AN}$, and obtain the transmitted signal $\mathbf{D}$ as:
+\begin{gather}
+    \mathbf{D} = \mathbf{F}_A\begin{pmatrix}
+        \mathbf{D}_B\\
+        \textbf{AN}
+    \end{pmatrix} 
+    \label{eq:data}
+\end{gather}
+where $\mathbf{F}_A$ is the transmit filter represented as:
+\begin{gather}
+    \mathbf{F}_A = \begin{pmatrix}
+        \mathbf{H}_{AB}\\
+        \mathbf{H}_{\text{AN}}
+    \end{pmatrix}
+    ^{H}
+    \Bigg(
+        \begin{pmatrix}
+            \mathbf{H}_{AB}\\
+            \mathbf{H}_{\text{AN}}
+        \end{pmatrix}
+        \begin{pmatrix}
+            \mathbf{H}_{AB}\\
+            \mathbf{H}_{\text{AN}}
+        \end{pmatrix}
+    ^{H}
+    \Bigg)^{-1}
+    \label{eq:F_A}
+\end{gather}
+Correspondingly, the received signal for Bob and Eve is:
+\begin{equation}
+    \begin{pmatrix}
+    \mathbf{R}_B \\ \mathbf{R}_E
+    \end{pmatrix} = 
+    \begin{pmatrix}\mathbf{H}_{AB} \\ \mathbf{H}_{AE}
+    \end{pmatrix} \cdot 
+    \mathbf{D} + \mathbf{N}
+\end{equation}
+% where
+% \begin{equation}
+%     \mathbf{R}_E = \mathbf{H}_{AE} \cdot \mathbf{F}_A \cdot \begin{pmatrix} \mathbf{D}_B \\ \textbf{AN} \end{pmatrix} + \mathbf{N}
+% \end{equation}

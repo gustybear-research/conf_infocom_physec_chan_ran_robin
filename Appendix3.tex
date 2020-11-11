@@ -1,0 +1,125 @@
+\newpage
+\section*{Proof of Theorem VI.1.}
+\begin{proof}
+To prove Theorem VI.1., which states
+\begin{align*}
+    I\left(\mathbf{D}_B(T);\mathbf{R}_E(T) \mid \right. & \left. \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right) =  \nonumber \\
+    I\left(\mathbf{D}_B(T);\mathbf{R}_E(T) \mid \right. & \left. \mathcal{H}_{ABE}\left(T-2\right), \delta \mathcal{H}_{ABE}(T) \right) = \nonumber \\
+    I\left(\mathbf{D}_B(T);\mathbf{R}_E(T) \mid \right. & \left. \delta \mathcal{H}_{ABE}(T)\right),
+\end{align*}
+where 
+\begin{align*}
+\mathcal{H}_{ABE}(T-2) = \left\{ \right. & \left. \mathcal{H}_{AB}\left(T-2\right), \right. \left. \mathcal{H}_{AE}\left(T-2\right) \right. \}\\
+\delta \mathcal{H}_{ABE}(T) = \left\{ \right. & \left. h_{AB}\left(T-1, u(T-1)\right), \right. \\
+& \left. h_{AE}\left(T-1, u(T-1)\right), \right.\\
+& \left. h_{AE}\left(T, u(T)\right)\ \right\}
+\end{align*}
+itis equivalent to prove that given $\delta \mathcal{H}_{ABE}(T)$, $\mathcal{H}_{ABE}(T-2)$ and $\left(\mathbf{D}_B(T),\mathbf{R}_E(T)\right)$ are conditionally independent. Since the messages $\mathbf{D}_B$ are independent from all the CSI information, and $\mathbf{R}_E(T)$ is a function of $\mathbf{D}_B(T)$ and $h_{AB}^{-1}\left(T,u(T)\right)$ plus some independent additive white Gaussian noise (AWGN), it is similar to prove that given $\delta \mathcal{H}_{ABE}(T)$, $\mathcal{H}_{ABE}(T-2)$ and $h_{AB}^{-1}(T,u(T))$ are conditionally independent, based on the Markov property.
+
+Recall the Markov property of the channels:
+\begin{equation*}
+\begin{split}
+& \Pr\left[h_{AB}\left(T, u(T)\right)\mid \mathcal{H}_{AB}(T-1)\right] = \\
+& \ \ \ \ \Pr\left[h_{AB}\left(T, u(T) \right) \mid h_{AB}\left(T-1, u(T-1)\right)\right].
+\end{split}
+\end{equation*}
+and
+\begin{equation*}
+\begin{split}
+& \Pr\left[h_{AB}\left(T,u(T)\right)\mid \mathcal{H}_{AE}(T)\right] = \\
+& \ \ \ \ \Pr\left[h_{AB}\left(T, u(T) \right) \mid h_{AE}\left(T, u(T)\right)\right]
+\end{split}
+\end{equation*}
+To simplify, we denote $X_1 = \mathcal{H}_{AB}(T-2)$, $X_2 = h_{AB}(T-1,u(T-1))$, $X_3 = h_{AB}(T,u(T))$, and similarly define $Y$ for channel A-E. Then the Markov property can be rewritten as:
+\begin{align*}
+    \Pr(X_3|X_1,X_2) & = \Pr(X_3|X_2)\\
+    \Pr(X_3|Y_1,Y_2,Y_3) & = \Pr(X_3|Y_3)
+\end{align*}
+which is illustrated below:
+\begin{center}
+\begin{tabular}{ c c c c c}
+ $X_1$ & $\longrightarrow$ & $X_2$ & $\longrightarrow$ & $X_3$ \\ 
+ $\big\updownarrow$ &  & $\big\updownarrow$ &  & $\big\updownarrow$ \\
+ $Y_1$ & $\longrightarrow$ & $Y_2$ & $\longrightarrow$ & $Y_3$
+\end{tabular}
+\end{center}
+And the CSI can be represented with $X$ and $Y$ in a simpler way as:
+\begin{align*}
+\mathcal{H}_{ABE}(T-2) & = \left\{ \right.  \left. X_1, \right. \left. Y_1 \right. \}\\
+\delta \mathcal{H}_{ABE}(T) & = \left\{ \right.  \left. X_2, \right. \left. Y_2, \right. \left. Y_3 \right. \}\\
+h_{AB}^{-1}\left( T,u(T)\right) & =   \left.X_3^{-1} \right.
+\end{align*}
+Hence our problem is equivalent to prove that given $(X_2,Y_2,Y_3)$, $(X_1,Y_1)$ and $X_3$ (which is equivalent to $X_3^{-1}$) are conditionally independent. Then we begin with
+\begin{subequations}
+    \begin{align*}
+        &\Pr(X_1,Y_1,X_3|X_2,Y_2,Y_3)\\
+        =&\Pr(X_3|X_2,Y_2,Y_3) \Pr(X_1,Y_1|X_2,Y_2,X_3,Y_3) \numberthis \label{eq9}
+    \end{align*}
+\end{subequations}
+\eqref{eq9} is obtained by expressing the joint probability with the conditional probability, then we focus on simplifying its last term, for which we look at:
+\begin{subequations}
+    \begin{align*}
+        &\Pr(X_3,Y_3|X_1,X_2,Y_1,Y_2)\\
+        =&\Pr(X_3|X_1,X_2,Y_1,Y_2)\Pr(Y_3|X_1,X_2,Y_1,Y_2,X_3) \numberthis \label{eq1}\\
+        =&\Pr(X_3|X_2)\Pr(Y_3|Y_2,X_3) \numberthis \label{eq2}\\
+        =&\Pr(X_3|X_2,Y_2)\Pr(Y_3|X_2,Y_2,X_3) \numberthis \label{eq2_1}\\
+        =&\Pr(X_3,Y_3|X_2,Y_2) \numberthis \label{eq2_2}\\
+    \end{align*}
+\end{subequations}
+Similarly, \eqref{eq1} is obtained by expressing the joint probability with the conditional probability. With Markov property of the channels,
+it is further simplified to \eqref{eq2}. Then we can add more conditional independent variables to it and get \eqref{eq2_1}, which equals to \eqref{eq2_2}. \eqref{eq2_2} implies that given $(X_2,Y_2)$, $(X_1,Y_1)$ and $(X_3,Y_3)$ are conditionally independent. Then back to \eqref{eq9}, we have 
+\begin{subequations}
+    \begin{align*}
+        &\Pr(X_1,Y_1,X_3|X_2,Y_2,Y_3)\\
+        =&\Pr(X_3|X_2,Y_2,Y_3) \Pr(X_1,Y_1|X_2,Y_2,X_3,Y_3) \numberthis \label{eq9_1}\\
+        =&\Pr(X_3|X_2,Y_2,Y_3)\Pr(X_1,Y_1|X_2,Y_2) \numberthis \label{eq10}\\
+        =&\Pr(X_3|X_2,Y_2,Y_3)\Pr(X_1,Y_1|X_2,Y_2,Y_3) \numberthis \label{eq11}
+    \end{align*}
+\end{subequations}
+which means given $(X_2,Y_2,Y_3)$, $X_3$ and $(X_1,Y_1)$ are conditionally independent. Since $X_3^{-1}$ is a function of $X_3$, then this conditional independence still holds when we replace $X_3$ with $X_3^{-1}$, which implies:
+\begin{equation}
+    \Pr(X_3^{-1}|X_1,Y_1,X_2,Y_2,Y_3) = \Pr(X_3^{-1}|X_2,Y_2,Y_3) 
+    \label{eq:XY}
+\end{equation}
+Then we reverse $X$, $Y$ in \eqref{eq:XY} back to the CSI, which gives us:
+\begin{align}
+& \Pr\left[ h_{AB}^{-1}\left(T,u(T)\right) | \mathcal{H}_{ABE}(T-2), \delta \mathcal{H}_{ABE}(T) \right] = \nonumber \\
+& \Pr\left[ h_{AB}^{-1}\left(T,u(T)\right) | \mathcal{H}_{AB}(T-1), \mathcal{H}_{AE}(T) \right] = \nonumber \\
+& \Pr\left[ h_{AB}^{-1}\left(T,u(T)\right) | \delta \mathcal{H}_{ABE}(T) \right] \label{eq133}
+\end{align}
+
+To compute $I\left(\mathbf{D}_B(T);\mathbf{R}_E(T) \mid \right. \left. \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right)$, we ignore the AWGN and consider $\Pr\left(\mathbf{D}_B(T);\hat{\mathbf{R}}_E(T) \mid \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right)$
+first, where $\hat{\mathbf{R}}_E(T) = h_{AB}^{-1}(\left(T,u(T)\right)  \mathbf{D}_B(T)$.
+
+\begin{subequations}
+    \begin{align*}
+        &\Pr\left(\mathbf{D}_B(T),\hat{\mathbf{R}}_E(T) \mid \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right)\\
+        = &\Pr\left(\mathbf{D}_B(T),h_{AB}^{-1}\left(T,u(T)\right)=\frac{\hat{\mathbf{R}}_E(T)}{\mathbf{D}_B(T)}\mid \mathcal{H}_{AB}(T-1), \mathcal{H}_{AE}(T)\right) \numberthis \label{eq13}\\
+        = &\Pr\left(\mathbf{D}_B(T)\mid \mathcal{H}_{AB}(T-1), \mathcal{H}_{AE}(T)\right) \\
+        &\times \Pr\left(h_{AB}^{-1}\left(T,u(T)\right)=\frac{\hat{\mathbf{R}}_E(T)}{\mathbf{D}_B(T)}\mid \mathcal{H}_{AB}(T-1), \mathcal{H}_{AE}(T)\right) \numberthis \label{eq14} \\
+        = &\Pr\left(\mathbf{D}_B(T)\mid \mathcal{H}_{ABE}(T)\right) \\
+        & \ \ \times \Pr\left(h_{AB}^{-1}\left(T,u(T)\right)=\frac{\hat{\mathbf{R}}_E(T)}{\mathbf{D}_B(T)}\mid \delta\mathcal{H}_{ABE}(T)\right) \numberthis \label{eq15} \\
+        = & \Pr\left(\mathbf{D}_B(T),\hat{\mathbf{R}}_E(T) \mid \delta\mathcal{H}_{ABE}(T)\right) \numberthis \label{eq16}
+    \end{align*}
+\end{subequations}
+With the fact that messages are independent from all the CSI information, we can get \eqref{eq14}, and meanwhile get rid of $\mathcal{H}_{ABE}(T-2)$ from $\mathbf{D}_B$'s condition, which gives us the first term of \eqref{eq15}, and with \eqref{eq133} we get the second term of \eqref{eq15}. Then by converting conditional probability to joint probability, we get \eqref{eq16}. Since the AWGN is independent from every term of above equations, we can add it into $\hat{\mathbf{R}}_E$ and get $\mathbf{R}_E$ while above results still holds. 
+
+So far, we have proved that 
+\begin{align*}
+    I\left(\mathbf{D}_B(T);\mathbf{R}_E(T) \mid \right. & \left. \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right) =  \nonumber \\
+    I\left(\mathbf{D}_B(T);\mathbf{R}_E(T) \mid \right. & \left. \delta \mathcal{H}_{ABE}(T)\right)
+\end{align*}
+for single antenna system. Next, we present the approach to extend it to MIMO. Note that, for the MIMO system, each element in the Markov chain becomes the channel matrix. Similarly,
+\begin{subequations}
+    \begin{align*}
+        &\Pr\left(\mathbf{D}_B(T),\hat{\mathbf{R}}_E(T) \mid \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right)\\
+        = &\Pr\left(\mathbf{D}_B(T),\mathbf{H}_{AB}^{-1}\left(T,u(T)\right)\in\mathbf{\Gamma}\mid \mathcal{H}_{AB}(T-1), \mathcal{H}_{AE}(T)\right) \numberthis \label{eq13}
+    \end{align*}
+\end{subequations}
+where
+\begin{equation*}
+    \mathbf{\Gamma} =\{\mathbf{H}_{AB}^{-1}\left(T,u(T)\right)\in\mathbf{\Gamma},\text{s.t.~} \hat{\mathbf{R}}_E(T) = \mathbf{H}_{AB}^{-1}(T,u(T))\mathbf{D}_B(T)\}
+\end{equation*}
+and represents a set of matrices where its element is a possible solution for $\mathbf{H}_{AB}^{-1}\left(T,u(T)\right)$. Then we can eliminate $\mathcal{H}_{ABE}(T-2)$ with similar procedures from Eq. \eqref{eq14} to Eq. \eqref{eq16}.  
+
+\end{proof}

@@ -1,0 +1,10 @@
+\subsection{Known-Plaintext Attack}
+Anand et al. \cite{anand2012strobe} showed that single antenna eavesdroppers cannot recover the message with her reception, however, Schulz and Zheng et al. \cite{schulz2014practical,zheng2016profiling} showed that by exploiting the known parts or low entropy parts of the transmitted signal, the known-plaintext or ciphertext-only attack is possible in practice. Specifically, Schulz et al. introduced a practical known-plaintext attack for orthogonal blinding scheme. Unlike the typical assumption in the literature which assumes that the transmitted signal is fully unknown to the eavesdropper, Schulz argued that Eve can utilize the well-known protocols or addresses fields to guess part of the transmitted signal, so that some plaintext-ciphertext pairs are known to the eavesdropper, which is similar to the known-plaintext attack in cryptography. Then the eavesdropper can use the known plaintexts to train an adaptive filter for AN suppression. Ideally, the receive filter $\mathbf{F}_E$ is:
+\begin{equation}
+    \mathbf{F}_E = \mathbf{F}_A^{-1} \cdot \mathbf{H}_{AE}^{-1}
+\end{equation}
+In practice, Eve estimates $\mathbf{F}_E$ as $\hat{\mathbf{F}}_E$ with some known plaintexts $\mathbf{D}_B$ through iterative process. That is, Eve minimizes the mean square error between the estimated data and the known plaintexts:
+\begin{equation}
+    \min\limits_{\hat{\mathbf{F}}_E}~ E|\mathbf{D}_B - \hat{\mathbf{F}}_E \cdot \mathbf{R}_E|^2
+\end{equation}
+There are several iterative training algorithms for this problem, but in general, for a fixed transmit filter $\mathbf{F}_A$, multiple symbols are required to obtain a good adaptive filter at Eve's side due to the iterative training procedure. In \cite{schulz2014practical}, even with good training technique and parameter setting, $20 - 30$ training symbols are required when the ratio of transmitted AN to data is fairly low.

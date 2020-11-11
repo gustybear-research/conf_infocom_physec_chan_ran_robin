@@ -1,0 +1,148 @@
+\section{Performance Evaluation}
+\begin{figure*}[t]
+\begin{subfigure}[t]{0.23\textwidth}
+\setlength{\tikzfigW}{0.9\linewidth}
+\setlength{\tikzfigH}{0.9\linewidth}
+\input{figs/numSamples.tikz}
+\end{subfigure}
+\hspace{0.07\textwidth}
+\begin{subfigure}[t]{0.23\textwidth}
+\setlength{\tikzfigW}{0.9\linewidth}
+\setlength{\tikzfigH}{0.9\linewidth}
+\input{figs/SNR.tikz}
+\end{subfigure}
+\hspace{0.07\textwidth}
+\begin{subfigure}[t]{0.23\textwidth}
+\setlength{\tikzfigW}{0.9\textwidth}
+\setlength{\tikzfigH}{0.9\textwidth}
+\input{figs/EveNDRnew.tikz}
+\end{subfigure} \\
+\begin{subfigure}[t]{0.22\textwidth}
+\setlength{\tikzfigW}{0.8\linewidth}
+\setlength{\tikzfigH}{0.8\linewidth}
+\input{figs/EveSNRnew.tikz}
+\end{subfigure}
+\hspace{0.02\textwidth}
+\begin{subfigure}[t]{0.22\textwidth}
+\setlength{\tikzfigW}{0.8\linewidth}
+\setlength{\tikzfigH}{0.8\linewidth}
+\input{figs/attacknew.tikz}
+\end{subfigure}
+\hspace{0.01\textwidth}
+\begin{subfigure}[t]{0.22\textwidth}
+\setlength{\tikzfigW}{0.8\textwidth}
+\setlength{\tikzfigH}{0.8\textwidth}
+\input{figs/AoD.tikz}
+\end{subfigure}
+\hspace{0.015\textwidth}
+\begin{subfigure}[t]{0.22\textwidth}
+\setlength{\tikzfigW}{0.8\textwidth}
+\setlength{\tikzfigH}{0.8\textwidth}
+\input{figs/numSamplesEx.tikz}
+\end{subfigure} \\
+\begin{subfigure}[t]{0.22\textwidth}
+\includegraphics[width=\textwidth]{figs/IMG_1669.eps}
+\end{subfigure}
+\hspace{\fill}
+\begin{subfigure}[t]{0.22\textwidth}
+\includegraphics[width=\textwidth]{figs/wa5vjb_2_6G.eps}
+\end{subfigure}
+\hspace{\fill}
+\begin{subfigure}[t]{0.22\textwidth}
+\includegraphics[width=\textwidth]{figs/IMG_1668.eps}
+\end{subfigure}
+\hspace{\fill}
+\begin{subfigure}[t]{0.22\textwidth}
+\includegraphics[width=\textwidth]{figs/plot.eps}
+\end{subfigure}
+\caption{From top to bottom, left to right: (a) SER of Bob and Eve over the number of training modes. SNR = 25dB; NDR = 1. (b) SER of Bob over Alice's NDR for different SNRs, with 20 training modes. (c) Eve's SER over the number of iterations; SNR = 25dB; various NDR. (d) Eve's SER over the number of iterations. NDR = 1; various SNR. (e) Eve's SER over the number of iterations; SNR = 25dB; NDR = 1; various antenna switching period. (f) Azimuth CSI magnitude distribution estimated with compressive
+sensing algorithm. (g) SER of Bob and Eve over the number of training mode based on the real-world channel data. (h) Real-world rotator. (i) Radiation pattern of the RA. (j) Real-world experiment setup. (k) Geometry of the setup.}
+\label{fig:performance}
+\end{figure*}
+
+In this section, we evaluate the performance of our  scheme under the practical known-plaintext attack with both simulation and real-world experiments. We start with the overview of simulation setup, and investigate the effects of various parameters. With simulation, we can cover a wide parameter range and establish the operating environment for the known-plaintext attack with a MIMO eavesdropper. Then with an implementation using USRP platform and a rotating RA, we validate the simulation results via experiments. 
+
+\subsection{Customized Reconfigurable Antenna}
+For the channel randomization purpose, we prefer RAs with distinct radiation patterns across different antenna modes. There are different types of RAs in the literature \cite{bernhard2007reconfigurable,LiBeamSteeringReconfigurableAntenna2015}, however, most of them are designed for communication purpose that only steer to several directions, which results in similar radiation patterns over antenna modes and makes them unsuitable for channel randomization purpose. To better evaluate our ROBin scheme, we build our own RA by rotating a log periodic antenna manufactured by Ettus Research \cite{antenna}. We first measure all the design parameters for the given log periodic antenna, including arm width, arm spacing and etc., then its radiation pattern is simulated using MALTAB antenna toolbox and illustrated in Fig. \ref{fig:performance}i. In the simulation, we rotate the antenna every one degree, so that we have 360 antennas modes in total. And in practice, the rotator is constructed with a motor and  a microcontroller, to rotate the antenna agilely to an arbitrary angle in the azimuth plane. The rotator is illustrated in Fig. \ref{fig:performance}h. Note that, we can have various antenna configurations at Alice's side when Alice has multiple antennas in general, e.g. Alice can enrich antenna patterns by varying the gain level of each antenna, which can be achieved with power allocation among RF chains. Also, Alice can have more antennas than use and randomly selects one among them for transmission, or randomize the power ratio among antennas to introduce additional randomness to wireless channels as in \cite{hassanieh2015securing}.
+
+% Hassanieh et al. in  \cite{hassanieh2015securing} also constructed a similar platform by rotating the transmitter with a fan motor at a constant speed. The transmitter is equipped with eight antennas, and each time a micro-controller randomly activates an antenna for transmission. However, for an eavesdropper who is able to measure the CSI of possible paths, the constant speed rotation allows him/her to predict the positions of antennas. In this way, the attacker can brute force the corresponding CSI of eight antennas to decode the message. In contrast, we rotate with a random speed \textcolor{red}{not sure}
+
+
+\subsection{Simulation Setup}
+As described in the system model, Alice, Bob and Eve are multi-antenna users with OFDM transmitters. W.l.o.g, we focus our simulation on a setup where Alice has two given log periodic antennas, Bob and Eve have one and two omnidirectional antenna(sTFor data transmission, the 30MHz wide AWGN channel is split into 48 equally spaced sub-channels, and the OFDM frames contain 192 symbols for each sub-channel. To evaluate the effect of Alice's AN, we vary the ratio of AN to the transmitted data signal, namely that Noise to Data Ratio (NDR). With fixed transmit power, the power for data signal is:
+\begin{equation}
+    D = \frac{1}{\text{NDR}+1}\begin{pmatrix}
+        D_B\\
+        \text{NDR} \cdot \text{AN}
+    \end{pmatrix} 
+\end{equation}
+We simulate 100 different environment settings, where five scatters are put for each of them and the data signal are transmitted as 4-QAM symbols. The distance from Eve to Bob is set as $150$cm, which is 12 times of the signal wavelength. For all the simulations, we consider a more practical eavesdropper than that in theoretical analysis, where not all the historical data signal are known to the eavesdropper. Then we define the switching period $T$ of RA based on an OFDM frame, and 120 frames are sent during the channel coherent time, hence we have $T \in [1,120]$. For each frame, the attacker is assumed to obtain two symbols. 
+Then if $T = 10$, it means that the transmission mode changes every ten packets, hence for a given transmit filter (computed from the given transmission mode), the attacker has 20 known symbols for filter training.
+% where the symbols known by attackers are from the well-known protocols in the WiFi frame. Though no pilots are needed in transmission phase of ROBin, the attacker is still able to guess parts of symbols from information like addresses. However, the attacker is not able to obtain all the historical data signal in practice. Besides, since AN is not intended for the receiver, it is random data in general, which makes it hard for the attacker to get enough plaintext and identify the  correct  decoding  filter. Correspondingly, we define the switching period $T$ of RA based on an OFDM frame, and 120 frames are sent during the channel coherent time, hence we have $T \in [1,120]$. For each frame, the attacker is assumed to obtain two symbols. 
+% Then if $T = 10$, it means that the transmission mode changes every ten packets, hence for a given transmit filter (computed from the given transmission mode), the attacker has 20 known symbols for filter training.
+
+% \begin{figure}[t]
+%     \Large
+%     \centering
+%     \resizebox{0.5\columnwidth}{!}{\input{figs/numSamples.tikz}}
+%     \caption{SER of Bob and Eve over the number of training modes. SNR = 25dB; NDR = 1; Eve's SER is obtained after 240 iterations.}
+%     \label{fig:numSamples}
+% \end{figure}
+% \begin{figure}[t]
+%     \Large
+%     \centering
+%     \resizebox{0.5\columnwidth}{!}{\input{figs/SNR.tikz}}
+%     \caption{SER of Bob over Alice's NDR for differnetn SNRs. Number of training modes is 20.}
+%     \label{fig:SNRNDR}
+% \end{figure}
+
+\subsection{Effect of the number of training modes}
+Since the estimation of the AoD distribution is based on compressive sensing in ROBin, theoretically, the more training modes we use, the more precise the estimation will be. Fig. \ref{fig:performance}a illustrates the SER of Bob and Eve over the number of training modes, obtained under ROBin and orthogonal blinding. Here to better show the impact of channel prediction to Bob's SER, we do not change the antenna mode during transmission, which is to set $T = 120$, then the only difference of these two schemes is that ROBin computes the transmit filter based on the predicted channel, while orthogonal blinding uses the measured channel matrix obtained from channel sounding. 
+% With log scale, when SER is 0, we substitute it with the SER that only one symbol is incorrectly demodulated over all the experiments, which is $4.34 \times 10^{-8}$ in this case. 
+From Fig. \ref{fig:performance}a we can see that there is a gap between Bob's SER obtained from two schemes, which is caused by the imperfect channel prediction and the missing channel sounding. However, it decreases with the number of training modes as expected, and when 20 training modes are used, Bob's SER is small enough for communication. On the other hand, Eve's SER obtained after 240 iterations is quite stable under the different number of training modes, this is because the effect of the transmit filter and artificial noise are both filtered out by Eve's receive filter.
+
+\subsection{Effect of artificial noise and channel noise to Bob}
+Fig. \ref{fig:performance}b shows Bob's SER with orthogonal blinding and ROBin, at this time the antenna switching period is set as $T = 6$, hence 20 transmission modes are used under a given environmental setting. From Fig. \ref{fig:performance}b, we can see that Bob's SER decreases as SNR increases under both schemes. Especially, both SNR and NDR have significant impacts on Bob's SER for orthogonal blinding. In contrast, the increase of SNR does not bring much benefit to Bob's SER for ROBin, since Bob's SER is dominated by the precise of channel prediction. Due to the imperfect channel prediction, part of the artificial noise is leaked to Bob's channel, which increases Bob's SER. Fortunately, as long as the NDR is not too large, the communication quality is still guaranteed. For instance, when SNR = 25dB and NDR = 2, Bob can still achieve an average SER of $1.1 \times 10^{-3}$. 
+
+\subsection{Effect of artificial noise and channel noise to Eve}
+Theoretically, the higher the NDR is, the higher is the SER on Eve's side. Here we set the antenna switching period as $T = 60$ to provide Eve some advantages. In Fig. \ref{fig:performance}c, we illustrate how Alice's NDR affects Eve's performance. As we expected, Eve's SER decreases with the increase of NDR. It is worth noticing that, when the power of artificial noise is not too strong, $\text{NDR} \leq 4$ for instance, we can see that Eve's SER has an obvious reduction with the iterative process; whereas, as the artificial noise becomes stronger, even if the number of iterations increases, the decrease of Eve's SER is not significant. 
+Besides, in Fig. \ref{fig:performance}d we illustrate how SNR affects Eve's SER. The effect of channel noise to Eve's SER is much weaker than that to Bob's SER, no significant variation for Eve's SER with the increase of SNR. Hence we can conclude that Eve's attack performance is mainly constrained by the power of artificial noise that Alice sent. And there is a tradeoff between the system secrecy (Eve's SER) and the communication quality (Bob's SER) when injecting artificial noise to the channel.
+
+% \begin{figure}[t]
+%     \Large
+%     \centering
+%     \resizebox{0.5\columnwidth}{!}{\input{figs/EveNDRnew.tikz}}
+%     \caption{Eve's SER over the number of iterations; SNR = 25dB; various NDR.}
+%     \label{fig:NDR_Eve}
+% \end{figure}
+
+% \begin{figure}[t]
+%     \Large
+%     \centering
+%     \resizebox{0.5\columnwidth}{!}{\input{figs/EveSNRnew.tikz}}
+%     \caption{Eve's SER over the number of iterations. NDR = 1. various SNR.}
+%     \label{fig:SNR_Eve}
+% \end{figure}
+
+\subsection{Effect of switching period to Eve}
+Intuitively, the faster the antenna switches, the higher is Eve's SER. In Fig. \ref{fig:performance}e, we show Eve's SER over the antenna switching period. As we expect, Eve's SER decreases as $T$ increases. When $T = 60$, it is the best case for Eve under ROBin scheme in Fig. \ref{fig:performance}e, we can see that Eve's SER ($0.4047$) is still fairly high. To quantify ROBin's security improvement, we compute the difference between Eve's SER in ROBin and in orthogonal blinding and normalize it with Eve's SER in the worst case, e.g., the SER of random guessing. For instance, when Alice transmits QPSK (4QAM) symbols, we compute: $(\text{SER}_{\text{ROBin}}-\text{SER}_{\text{OB}})/0.75$. The result shows we can elevate the eavesdropper's SER by 46\% under 4-QAM modulation. When the antenna mode changes rapidly, especially for $T = 1$, we suppress Eve's attack success rate to the level of random guessing. Finally, we vary the number of known symbols in each frame from 2 to 20. And the result in Fig. \ref{fig:performance}e shows that Eve's SER does not fluctuate much due to the convergence of the algorithm.
+
+
+% And to see how much performance we raise with ROBin in terms of Eve's SER, we normalize the increment of Eve's SER with her worst case, which is the random guessing with SER being 0.75, i.e., we compute: $(\text{SER}_{\text{E}}^{\text{OB+}} - \text{SER}_{\text{E}}^{\text{OB}}) / 0.75$, which turns out that, we can elevate the eavesdropper's SER by $46\%$. Besides, we can see that when the antenna mode changes rapidly, especially for $T = 1$, we suppress Eve's attack success rate to the level of random guessing. We also simulate how the number of known symbols in each frame affects Eve's performance, for which we increase it from 2 to 20. And the result shows that Eve's SER does not fluctuate much due to the convergence of the algorithm.
+
+
+\begin{table}[t]
+    \centering
+    \caption{Secrecy leakage computed with real-world CSI}
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        $|\mathcal{S}_1|$ & 10 & 20 & 30 & 40 \\
+        \hline
+        Secrecy Leakage & 0.36 & 0.22 & 0.23 & 0.21\\
+        \hline
+    \end{tabular}
+    \label{tab:I}
+\end{table}
+
+\subsection{Effect of real-world channels}
+We rotate the RA with the platform in Fig. \ref{fig:performance}h for the real-world CSI measurement in 2.6HGz. In the experiment, each of our OFDM frames contains 320 symbols and lasts for 0.08s. We collect the CSI data for about 60 seconds and change mode every $1/18$ seconds, which means the antenna switching period is less than the duration of a frame. To facilitate our simulation process, we set the antenna switching period to $T = 1$ while simulating. Based on the measuerd CSI, we first show the accuracy of the AoD estimation with 40 training modes in \ref{fig:performance}f. Observed that the predicted and measured CSI are similar for most of antennas modes, and our analysis result shows that the average prediction error decreases with the increase of training modes, which validates the effectiveness of our compressive sensing based AoD estimation algorithm. For all the parameters presented in simulations, we only show the SER of Bob and Eve over the number of training modes due to the page limitation. Observed that Fig. \ref{fig:performance}f shows a similar trend as in Fig. \ref{fig:performance}a, which indicates the consistency of our simulation and implementation. The secrecy we defined in Sec. \ref{sec:theory} is calculated with the measured CSI and shown in Table \ref{tab:I}, where $|\mathcal{S}_1|$ is the number of training modes. We can see that the secrecy leakage is low, however, it is nonzero though the SER of Eve is close to random guessing. This is because the secrecy leakage considers the temporal and spatial correlations of the main channel and the eavesdropper's channel, while the known-plaintext attack strategy only utilizes the temporal correlation of  the main channel.

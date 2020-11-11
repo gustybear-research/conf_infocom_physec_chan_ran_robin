@@ -1,0 +1,66 @@
+\section*{Appendix}
+\begin{proof}
+To simplify, we denote $X_1 = X(1,\dots,u-2)$, $X_2 = X(u-1)$, $X_3 = X(u)$ and similarly for $Y$. We begin with
+\begin{subequations}
+    \begin{align*}
+        &\Pr(X_1,Y_1,X_3|X_2,Y_2,Y_3)\\
+        =&\Pr(X_3|X_2,Y_2,Y_3) \Pr(X_1,Y_1|X_2,Y_2,X_3,Y_3) \numberthis \label{eq9}
+    \end{align*}
+\end{subequations}
+\eqref{eq9} is obtained by expressing the joint probability with the conditional probability, then we focus on simplifying its last term, which is similar to:
+\begin{subequations}
+    \begin{align*}
+        &\Pr(X_3,Y_3|X_1,X_2,Y_1,Y_2)\\
+        =&\Pr(X_3|X_1,X_2,Y_1,Y_2)\Pr(Y_3|X_1,X_2,Y_1,Y_2,X_3) \numberthis \label{eq1}\\
+        =&\Pr(X_3|X_2)\Pr(Y_3|Y_2,X_3) \numberthis \label{eq2}\\
+        =&\Pr(X_3|X_2,Y_2)\Pr(Y_3|X_2,Y_2,X_3) \numberthis \label{eq2_1}\\
+        =&\Pr(X_3,Y_3|X_2,Y_2) \numberthis \label{eq2_2}\\
+    \end{align*}
+\end{subequations}
+Similarly, \eqref{eq1} is obtained by expressing the joint probability with the conditional probability, 
+% with Markov chains \eqref{eq:chain1} and \eqref{eq:chain2}, 
+with Markov property of the channels,
+it is further simplified to \eqref{eq2}. Then we can add more conditional independent variables in Markov chains and get \eqref{eq2_1}, which equals to \eqref{eq2_2}. \eqref{eq2_2} implies that given $(X_2,Y_2)$, $(X_1,Y_1)$ and $(X_3,Y_3)$ are conditionally independent. Then back to \eqref{eq9}, we have 
+\begin{subequations}
+    \begin{align*}
+        &\Pr(X_1,Y_1,X_3|X_2,Y_2,Y_3)\\
+        =&\Pr(X_3|X_2,Y_2,Y_3) \Pr(X_1,Y_1|X_2,Y_2,X_3,Y_3) \numberthis \label{eq9_1}\\
+        =&\Pr(X_3|X_2,Y_2,Y_3)\Pr(X_1,Y_1|X_2,Y_2) \numberthis \label{eq10}\\
+        =&\Pr(X_3|X_2,Y_2,Y_3)\Pr(X_1,Y_1|X_2,Y_2,Y_3) \numberthis \label{eq11}
+    \end{align*}
+\end{subequations}
+Then we replace $X$, $Y$ with CSI, and substitute it into above equations, we have:
+\begin{equation}
+    \Pr(\Xi,h_{AB}(u)|\Omega)=\Pr(\Xi|\Omega)\Pr(h_{AB}(u)|\Omega)
+    \label{eq122}
+\end{equation}
+which means that given $\Omega$, $h_{AB}(u)$ and $\Xi$ are conditionally independent. Since $Z=h_{AB}^{-1}(u)$ is a function of $h_{AB}(u)$, then the above conditional independence in \eqref{eq122} still holds, which means:
+\begin{equation}
+    \Pr(\Xi,Z|\Omega)=\Pr(\Xi|\Omega)\Pr(Z|\Omega)
+    \label{eq133}
+\end{equation}
+Next, we consider
+\begin{subequations}
+    \begin{align*}
+        &\Pr(D_B=x,W=w|\Xi=\xi,\Omega=\omega)\\
+        =~ &\Pr(D_B=x,ZD_B=w|\Xi=\xi,\Omega=\omega) \numberthis \label{eq12}\\
+        =~ &\Pr(D_B=x,Z=\frac{w}{x}|\Xi=\xi,\Omega=\omega) \numberthis \label{eq13}\\
+        =~ &\Pr(D_B=x|\Xi=\xi,\Omega=\omega)\Pr(Z=\frac{w}{x}|\Xi=\xi,\Omega=\omega) \numberthis \label{eq14}\\
+        =~ &\Pr(D_B=x|\Omega=\omega)\Pr(Z=\frac{w}{x}|\Omega=\omega) \numberthis \label{eq15}\\
+        =~ &\Pr(D_B=x,Z=\frac{w}{x}|\Omega=\omega) \numberthis \label{eq16}\\
+        =~ &\Pr(D_B=x,W=w|\Omega=\omega) \numberthis \label{eq17}
+    \end{align*}
+\end{subequations}
+With the fact that messages are independent from all the CSI information, namely that $D_B$ is independent from $\Xi$, $\Omega$ and $Z$. Then we can get Eq. \eqref{eq14}, and meanwhile get rid of $\Xi$ from $D_B$'s condition, which gives us the first term of \eqref{eq15}, and with \eqref{eq133} we get Eq. \eqref{eq15}. Next, Eq. \eqref{eq16} is obtained by converting conditional probability to joint probability, which can be further write as Eq. \eqref{eq17}. \eqref{eq17} shows that given $\Omega$, $(D_B,W)$ and $\Xi$ are conditionally independent. Therefore, $I(D_B;W|\Xi,\Omega)=I(D_B;W|\Omega)$.
+
+Next, we present the approach to extend the proof to MIMO case. Note that, for the MIMO system, each element in the Markov chain for the wireless channel becomes the channel matrix. Similarly,
+\begin{subequations}
+\begin{align*}
+&\Pr(\mathbf{D}=\mathbf{x},\mathbf{W}=\mathbf{w}|\mathbf{\Xi}=\boldsymbol{\xi},\mathbf{\Omega}=\boldsymbol{\omega})\\
+=&\Pr(\mathbf{D}=\mathbf{x},\mathbf{ZD}=\mathbf{w}|\mathbf{\Xi}=\boldsymbol{\xi},\mathbf{\Omega}=\boldsymbol{\omega}) \numberthis \label{eq18}\\
+=&\Pr(\mathbf{D}=\mathbf{x},\mathbf{Z}=\mathbf{\Gamma}|\mathbf{\Xi}=\boldsymbol{\xi},\mathbf{\Omega}=\boldsymbol{\omega}) \numberthis \label{eq19}
+\end{align*}
+\end{subequations}
+In \eqref{eq19}, $\mathbf{\Gamma} = \{\mathbf{z} \in \mathbf{\Gamma}, \text{s.t.} ~\mathbf{w} = \mathbf{zx}\}$, meaning that $\mathbf{\Gamma}$ is a set of matrices where its element is a possible solution for $\mathbf{Z}$. Then we can eliminate $\mathbf{\Xi}$ with similar procedures from Eq. \eqref{eq14} to Eq. \eqref{eq17}.  
+
+\end{proof}

@@ -1,0 +1,202 @@
+\section{Security Analysis}\label{sec:theory}
+In this section, we formally analyze the security properties of ROBin. To model ROBin, we define the CSI of a wireless channel, $\mathbf{H}(\cdot)$ as a function of discrete-time $t$ and antenna mode $u$. Under this definition, the CSI in ROBin behaves as a function $\mathbf{H}\left(t,u(t)\right)$, where $u$ changes for each time step. We further assume that a sequence of $\mathbf{H}\left(t, u(t)\right)$s, forms a Markov chain \cite{tan2000first}, such that $\mathbf{H}\left(T, u(T)\right)$ is independent of past CSIs, $\left\{\mathbf{H}\left(t, u(t)\right)\mid t < T-1 \right\}$, given $\mathbf{H}\left(T{-}1, u(T{-}1)\right)$. To quantify the security of ROBin, we derive the conditional mutual information between Eve's receiving signal at time $T$, $\mathbf{R}_E(T)$, and the pre-blinding message, $\mathbf{D}_B(T)$, assuming Eve knows all previous CSIs between Alice and Bob, $\left\{\mathbf{H}_{AB}\left(t,u(t)\right)\mid t = 0,...,T{-}1\right\}$, and all CSIs between Alice and herself, $\left\{\mathbf{H}_{AE}\left(t,u(t)\right)\mid t = 0,...,T\right\}$ (Sec. \ref{sec:theo1}). Finally, we verify the correctness of the proposed metric and explain the insights gained from the analytical results (Sec. \ref{sec:theo2}).
+
+\subsection{Secrecy Leakage as Conditional Mutual Information}
+\label{sec:theo1}
+% Secrecy capacity is a commonly used and well-studied metric in theoretical physical layer security studies. Although the results shown in the literature are important, they are rarely used for practical physical layer scheme evaluations, since most of them rely on assumptions that are hard to satisfy in practice (e.g., all the channels are known by the transmitter or all  nodes, SNR and block length go to infinity, etc.). Alternatively, perfect secrecy is a notation often considered in cryptosystems, which is defined as the ciphertext reveals no information about the plaintext. Similarly, the definition of perfect secrecy is so strict that makes it hardly being used.
+
+% Perfect secrecy is a well-known cryptosystem model. Typically, a cryptosystem is considered to have perfect secrecy if, for any message $X$ and any ciphertext $Y$, we have $p(X|Y) = p(X)$, which indicates that the attacker learns nothing from the ciphertext. However, the definition is so strict that makes the notation rarely used in practice. Alternatively, 
+% Besides, the definitions of perfect secrecy and secrecy capacity are not capable of indicating the practical PHY-layer attack schemes proposed in recent years. For example, for the practical known-plaintext attack proposed in \cite{schulz2014practical}, the eavesdropper's knowledge about the legitimate channel is crucial to attack performance, while this part of the information is not included in above two metrics. 
+
+To quantify eavesdropper's capacity under known-plaintext attacks in a way congruence with cryptanalysis, we consider the secrecy leakage as the conditional mutual information between the Eve's receiving signal and the pre-blinding message, given Eve has full knowledge of all previous CSIs via known symbols. That is, we assume that, as $t=T$, all the previously transmitted symbols, $\mathbf{D}(t),\ t = 0,...,T{-}1$, are known to Eve, which allows Eve to compute $\mathbf{H}_{AB}(t, u(t)),\ t = 0,...,T{-}1$. 
+
+Let $\mathcal{H}(T)$ defines a set of previous CSIs up to time T:
+\begin{equation}
+    \mathcal{H}(T) = \left\{\mathbf{H}\left(t,u(t)\right) \mid t = 0,...,T \right\}.
+\end{equation}
+
+Assuming $\mathcal{H}_{AE}(T)$ and $\mathcal{H}_{AB}(T-1)$ are known to Eve. The secrecy leakage is defined as a conditional mutual information:
+\begin{equation}
+    I\left(\mathbf{D}_B(T);\mathbf{R}_E(T)\mid\mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right)
+    \label{metric1}
+\end{equation}
+
+% In particular, to consider the worst case to legitimate pairs, we consider a much stronger practical known-plaintext attack than that in \cite{schulz2014practical}. We assume that at time $t$, all the historical data from $X_1$ to $X_{t-1}$ is known to the attacker, and the known-plaintexts under any transmit filter are enough for the attacker to infer the historical CSI of channel A-B from $h_{AB}(1)$ to $h_{AB}(u-1)$ precisely. With the knowledge of her own channel and Bob's historical channel, the leakage of the system is defined as:
+% \begin{equation}
+%     I(X_t;Y_t|h_{AB}(1),\cdots,h_{AB}(u-1),h_{AE}(1),\cdots,h_{AE}(u-1),h_{AE}(u))
+%     \label{metric1}
+% \end{equation}
+For simplicity, we first consider a single antenna system, in which $\mathbf{H}\left(t,u(t)\right)$ reduces to a scalar function $\mathbf{h}\left(t,u(t)\right)$. and the pre-coding filter becomes the inverse of the main channel, e.g., $F_A(T) = h_{AB}^{-1}\left(T,u(T)\right)$. Note that all derivations below also apply to MIMO system, which we will discuss later. The received signal at Eve's side is:
+\begin{equation*}
+\begin{split}
+    \mathbf{R}_E(T) & = h_{AE}\left(T,u(T)\right) \left(h_{AB}^{-1}\left(T,u(T)\right) \mathbf{D}_B(T)\right) + \mathbf{N} \\
+    & \triangleq h_{AB}^{-1}\left(T,u(T)\right)  \mathbf{D}_B(T) + \mathbf{N},
+    \label{eq:yt}
+\end{split}
+\end{equation*}
+after Eve equalizes $h_{AE}\left(T,u(T)\right)$. Omitting  $\mathbf{N}$, Eq. \eqref{metric1} expands to 
+\begin{equation*}
+    I\left(\mathbf{D}_B(T);h_{AB}^{-1}\left(T,u(T)\right)  \mathbf{D}_B(T) \mid \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right)
+    \label{metric2}
+\end{equation*}
+To simplify the equation above, consider the conditional probability of $h_{AB}\left(T, u(T)\right)$ given  $\mathcal{H}_{AB}(T-1)$. Due to the Markov property,  
+\begin{equation*}
+\begin{split}
+& \Pr\left[h_{AB}\left(T, u(T)\right)\mid \mathcal{H}_{AB}(T-1)\right] = \\
+& \ \ \ \ \Pr\left[h_{AB}\left(T, u(T) \right) \mid h_{AB}\left(T-1, u(T-1)\right)\right].
+\end{split}
+\end{equation*}
+As for the conditional probability of $h_{AB}\left(T, u(T)\right)$ given $\mathcal{H}_{AE}(T)$. Although $h_{AB}\left(t, u(t)\right)$ and $h_{AE}\left(t, u(t)\right)$ are mostly independent, they are correlated at the same time step, since the antenna pattern is the same for $h_{AB}(u)$ and $h_{AE}(u)$, resulting
+\begin{equation*}
+\begin{split}
+& \Pr\left[h_{AB}\left(T, u(T)\right)\mid \mathcal{H}_{AE}(T)\right] = \\
+& \ \ \ \ \Pr\left[h_{AB}\left(T, u(T) \right) \mid h_{AE}\left(T, u(T)\right)\right].
+\end{split}
+\end{equation*}
+Based on these conditions, we have the following Theorem:
+\begin{theorem}
+Assuming the wireless channel has the Markov property, the secrecy leakage of ROBin can be simplified as\footnote{The proof of this Theorem is in Appendix}:
+% footnote{The proof of this Theorem can be found in our technical report at https://tinyurl.com/y2t4njcx}
+\begin{align}
+    I\left(\mathbf{D}_B(T);\mathbf{R}_E(T) \mid \right. & \left. \mathcal{H}_{AB}(T-1),\mathcal{H}_{AE}(T)\right) =  \nonumber \\
+    I\left(\mathbf{D}_B(T);\mathbf{R}_E(T) \mid \right. & \left. h_{AB}\left(T-1, u(T-1)\right), \right. \nonumber \\
+    & \left. h_{AE}\left(T-1, u(T-1)\right), \right. \nonumber \\
+    & \left. h_{AE}\left(T, u(T)\right)\right) = \nonumber \\
+    I\left(\mathbf{D}_B(T);\mathbf{R}_E(T) \mid \right. & \left. \delta \mathcal{H}_{ABE}(T)\right),
+\label{eq:secrecy_leakage_simplified}
+\end{align}
+where
+\begin{align*}
+\delta \mathcal{H}_{ABE}(T) = \left\{ \right. & \left. h_{AB}\left(T-1, u(T-1)\right), \right. \\
+& \left. h_{AE}\left(T-1, u(T-1)\right), \right.\\
+& \left. h_{AE}\left(T, u(T)\right)\ \right\}
+\end{align*}
+\label{corollary2}
+\end{theorem}
+\vspace{-15pt}
+This simplification allows us to calculate the numerical secrecy leakage when all the possible values of discretize CSI are in a small range. Next we use numerical results to show the relationship between channel correlation and privacy leakage.
+% Generalized the condition above if above Markov chains can be summarized as:
+% \begin{align}
+%     \Pr[X(T)|X(1,\dots, u-1)]  & = \Pr[X(u)|X(u-1)] \label{eq:chain1} \\
+%     \Pr[X(u)|Y(1,\dots,u)] & = \Pr[X(u)|Y(u)] 
+%     \label{eq:chain2}
+% \end{align}
+% Based on these Markov chains, we have following corollary:
+% \begin{corollary}
+%     $I(D_B;W|\Xi,\Omega)=I(D_B;W|\Omega)$
+% \label{corollary2}
+% \end{corollary}
+% The proof is in Appendix, including the MIMO case. Now instead of calculating $I(D_B;W|\Xi,\Omega)$, we can simply compute $I(D_B;W|\Omega)$.
+% Therefore, Eq. \label{metric2} reduces to
+
+
+% as the leakage metric, where $\Xi$ and $\Omega$ together are the CSI information Eve has until $u$-th transmitting mode:
+% \begin{align*}
+% \Xi&=\{h_{AB}(1, \dots, u-2),h_{AE}(1, \dots, u-2)\}\\
+% \Omega&=\{h_{AB}(u-1),h_{AE}(u-1,u)\}
+% \end{align*}
+% To make the metric easy to follow, we consider only one message $D_B$ and abbreviate the notations above as:
+% $D_B=\mathbf{D}_B(u)$, $Z=h^{-1}_{AB}(u)$, $W=h^{-1}_{AB}(u)D_B(u)=ZD_B$. And in this form, $D_B$, $Z$, and $W$ is analogous to the plaintext, key, and ciphertext in a cryptosystem, but here we use multiplication instead of modular operation.
+% Then the final leakage we consider is:
+% \begin{equation}
+%     I(D_B;W|\Xi,\Omega)
+% \end{equation}
+% w.l.o.g., we discretize the CSI in the above leakage metric for numerical calculation, and denote the size of it as $|h|$. When the joint distribution of the CSI is known, the close form of the leakage can be obtained as well. However, a direct computing of current metric incurs exponential complexity since we need to characterize the values of $\Pr(D_B;W|\Xi,\Omega)$, which are $|D_B|^2|h|^{2u}$. Hence, to make the leakage tractable, we simplify it first.
+
+% Obviously, it is complex to compute or get any insights with the current metric due to the overwhelming channel information. To make this leakage tractable, we simplify it first.
+
+% Since wireless channels are commonly characterized by Markov models \cite{tan2000first}, we assume that the channel still forms a Markov chain when taking the effect of antennas into account. For the self-relation of a channel, e.g. channel A-B, since the antenna mode is randomly and independently selected, then only the  physical channel is dependent on the historical channel, which is independent of the channel before $u-1$ given the previous channel. Thus, the current CSI is independent of all past CSI given the previous CSI. Meaning that $ \Pr[h_{AB}(u)|h_{AB}(1, \dots, u-1)]=\Pr[h_{AB}(u)|h_{AB}(u-1)]$. And for the cross-relation between channel A-B and A-E, though they have different physical channel characteristics, the effect of the antenna to the CSI is fixed for them under the same $u$-th transmitting mode. Then the information of antenna profile  is the same for $h_{AB}(u)$ and $h_{AE}(u)$. Meaning that $\Pr[h_{AB}(u)|h_{AE}(1, \dots, u)]=\Pr[h_{AB}(u)|h_{AE}(u)]$.
+
+% In general, the above Markov chains can be summarized as:
+% \begin{align}
+%     \Pr[X(u)|X(1,\dots, u-1)]  & = \Pr[X(u)|X(u-1)] \label{eq:chain1} \\
+%     \Pr[X(u)|Y(1,\dots,u)] & = \Pr[X(u)|Y(u)] 
+%     \label{eq:chain2}
+% \end{align}
+% Based on these Markov chains, we have following corollary:
+% \begin{corollary}
+%     $I(D_B;W|\Xi,\Omega)=I(D_B;W|\Omega)$
+% \end{corollary}
+% The proof is in Appendix, including the MIMO case. Now instead of calculating $I(D_B;W|\Xi,\Omega)$, we can simply compute $I(D_B;W|\Omega)$.
+
+% \begin{figure*}[t]
+% \begin{subfigure}[t]{0.22\textwidth}
+% \includegraphics[width=\textwidth]{figs/rotator.eps}
+% \caption{Rotator with back-to-back LPDA antennas}
+% \label{fig:setup1}
+% \end{subfigure}
+% \hspace{\fill}
+% \begin{subfigure}[t]{0.22\textwidth}
+% \includegraphics[width=\textwidth]{figs/rotator_pattern.eps}
+% \caption{Radiation pattern of the log periodic antenna}
+% \label{wa5vjbPattern}
+% \end{subfigure}
+% \hspace{\fill}
+% \begin{subfigure}[t]{0.22\textwidth}
+% \includegraphics[width=\textwidth]{figs/testbed_02.eps}
+% \caption{Our rotating reconfigurable antenna platform.}
+% \label{fig:setup3}
+% \end{subfigure}
+% \hspace{\fill}
+% \begin{subfigure}[t]{0.22\textwidth}
+% \includegraphics[width=\textwidth]{figs/testbed_05.eps}
+% \caption{Antenna setup for practical measurements}
+% \label{fig:setup4}
+% \end{subfigure}
+% \vspace{-15pt}
+% \end{figure*}
+
+\subsection{Correctness and Insights}
+\label{sec:theo2}
+\subsubsection{Single-Antenna Eavesdropper}
+Alice can apply a reduced ROBin scheme without orthogonal blinding in a single-input and single-output (SISO) system, with Bob and Eve having one regular antenna and Alice having one reconfigurable antenna. To calculate the secrecy leakage, we first generate the CSI with the truncated Gaussian distribution in the range of $(-2,2)$, then we normalize its real (imaginary) part into four values, i.e. $\text{Re}[\delta \mathcal{H}_{ABE}(T)] \in \{\pm1.5,\pm0.5\}$. And for the message we consider 4QAM, namely that $\mathbf{D}_B(T) = x \in \{\pm1 + j, \pm 1 - j\}$, then the entropy of the message is $\mathrm{H}(\mathbf{D}_B(T)) = 2$. and $\text{Re}[\mathbf{R}_E(T)] \in \{\pm1.5,\pm0.5\}$, $|\mathbf{R}_E(T)| = 16$, $|(\mathbf{D}_B(T),\mathbf{R}_E(T),\delta \mathcal{H}_{ABE}(T))| = 256 \times 2^{10}$ correspondingly. Hence we set the number of the samples to 30 million, which is about 100 times of $|(\mathbf{D}_B(T),\mathbf{R}_E(T),\delta \mathcal{H}_{ABE}(T))|$. The calculated Eq. \ref{eq:secrecy_leakage_simplified} versus correlation coefficient between $\mathbf{H}_{AB}$ and $\mathbf{H}_{AB}$ is 
+shown in Fig. \ref{fig:N}.
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.25\textwidth]{figs/theory.eps}
+    \caption{Secrecy leakage over the channel correlation coefficient between $\mathbf{H}_{AB}$ and $\mathbf{H}_{AB}$.}
+    \label{fig:N}
+    \vspace{-15pt}
+\end{figure}
+
+
+
+We can observe that the leakage increases with the increase of the correlation coefficient between $\mathbf{H}_{AB}$ and $\mathbf{H}_{AB}$, in other words, the information the eavesdropper gained decreases with the decrease of the correlation between $\mathbf{H}_{AB}$ and $\mathbf{H}_{AB}$. This result quantitatively verifies the motivation of our channel randomization strategy: the system becomes more secure after reducing the correlation between the two channels to the receiver and the eavesdropper. And results in \cite{pan2017message} shown that a reconfigurable antenna is capable of decreasing the correlation of two channels. Hence introducing a reconfigurable antenna to the system brings us two benefits: actively randomizing the wireless channel and reducing correlations among channels. 
+% Besides, from the numerical results we can see that $I(X;\mathbf{W}|\Omega) \approx 0$ when correlation coefficient is 0, and $I(X;\mathbf{W}|\Omega) = H(X) = 2$ when correlation coefficient is 1, which are consistent with the lower bound and upper bound of this conditional mutual information.
+
+%\subsubsection{MIMO System}
+\subsubsection{Multi-Antenna Eavesdropper}
+Alice can apply the full ROBin scheme with orthogonal blinding in a multi-input and single-output (MISO) or multi-input and multi-output (MIMO) system. Assume Eve has multiple antennas. 
+For a given antenna mode, if the number of known symbols is less than the number of Alice's antennas $n_a$, Eve cannot find a unique decoding filter, because the least square problem for the LS channel estimation is underdetermined. However, the iterative decoding filter training process still provides Eve partial information about the message. And we use SER to evaluate this leakage in the simulation. When the number of known symbols is greater than $n_a$, the problem becomes overdetermined and allows Eve to identify the correct decoding filter. Nevertheless, as the number of known symbols do not accumulate when Alice reuses the same antenna mode at different channel coherent periods, as long as Alice switches the antenna mode faster than the duration of $n_a$ symbols, the secrecy leakage of our scheme is low regardless of the number of antennas Eve has.
+% For a given antenna mode, if the number of known symbols is greater than the number of Alice's antennas $n_a$, the least square problem for the LS channel estimation becomes overdetermined and allows Eve to identify the correct decoding filter. When the number of known symbols is less than $n_a$, Eve cannot find a unique decoding filter, since the problem is underdetermined. However, the iterative decoding filter training process still provides Eve partial information about the message. In our simulation, we use SER to evaluate this leakage. Nevertheless, since the number of known symbols do not accumulate when Alice reuses the same antenna mode at different channel coherent periods, as long as Alice switches the antenna mode faster than the duration of $n_a$ symbols, the secrecy leakage of our scheme is low regardless of the number of antennas Eve has.
+
+%-----------------------------------------------------------------
+% \begin{figure*}[t]
+% \begin{subfigure}[t]{0.24\textwidth}
+% \resizebox{\columnwidth}{!}{\input{figs/numSamples.tikz}}
+%     \caption{SER of Bob and Eve over the number of training modes. SNR = 25dB; NDR = 1; Eve's SER is obtained after 240 iterations.}
+%     \label{fig:numSamples}
+% \end{subfigure}
+% \hspace{\fill}
+% \begin{subfigure}[t]{0.24\textwidth}
+% \resizebox{\columnwidth}{!}{\input{figs/SNR.tikz}}
+%     \caption{SER of Bob over Alice's NDR for differnetn SNRs. Number of training modes is 20.}
+%     \label{fig:SNRNDR}
+% \end{subfigure}
+% \hspace{\fill}
+% \begin{subfigure}[t]{0.24\textwidth}
+% \resizebox{\columnwidth}{!}{\input{figs/EveNDRnew.tikz}}
+%     \caption{Eve's SER over the number of iterations; SNR = 25dB; various NDR.}
+%     \label{fig:NDR_Eve}
+% \end{subfigure}
+% \hspace{\fill}
+% \begin{subfigure}[t]{0.24\textwidth}
+% \resizebox{\columnwidth}{!}{\input{figs/EveSNRnew.tikz}}
+%     \caption{Eve's SER over the number of iterations. NDR = 1. various SNR.}
+%     \label{fig:SNR_Eve}
+% \end{subfigure}
+% \caption{Simulation Results.}
+% \vspace{-15pt}
+% \end{figure*}
+
+% We also note that, if the mapping from the transmitted signal to the received signal is one-to-one, i.e. only one key $\mathbf{Z}$ results in a $(\mathbf{D},\mathbf{W})$ pair, then $\Pr(\mathbf{D},\mathbf{W}|\mathbf{\Omega}) = 1$ and $I(\mathbf{D},\mathbf{W}|\mathbf{\Omega}) = H(\mathbf{D}) = H(\mathbf{D}_B)$. In practice, if the transmit filter (the key) is reused, the eavesdropper can simply look up the historical plaintext-ciphertext pairs to decode. This is why we should avoid reusing the same antenna state within one channel coherence time period. Fortunately, the inherent dynamics of the wireless channel (e.g. channel noise) alter Eve's received signal. Hence even sending the same data signal and AN at different time slots, Eve receives different signal, which makes the same $(\mathbf{D},\mathbf{W})$ pair impossible to appear. More importantly, the OFDM modulator diffuses the QAM symbols, meaning that multiple combinations of messages, AN and channel noise can result in the same received signal at Eve's side.

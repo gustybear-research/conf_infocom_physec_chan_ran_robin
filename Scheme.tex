@@ -1,0 +1,86 @@
+\section{Robin: Channel-Randomized Orthogonal Blinding}
+The vulnerability of preliminary orthogonal blinding results from the unchanged main channel, which allows the eavesdropper to estimate it via known symbols and filter the AN out. Actually, this flaw can be amended with the channel randomization approach, which is to actively randomize the wireless channel by introducing special antennas \cite{aono2005wireless,pan2017message}, antenna motions \cite{hassanieh2015securing} or artificial channel disturbance \cite{hou2015message}. Intuitively, when the wireless channel is rapidly randomized, 
+% Eve can be blocked from gathering enough symbols for filter training, so that the message cannot be extracted from Eve's received signal. 
+Eve can be blocked from gathering enough symbols for filter training. 
+However, Eve can also explore the correlation between her channels and the main channel to estimate Bob's channel directly for message recovering. Results in \cite{popper2011investigation,pan2017message} showed that there is a strong correlation between two channels when the attacker is delicately positioned, and this correlation can be reduced with channel randomization \cite{pan2017message}. Hence, we propose a channel-randomized orthogonal blinding scheme which can be viewed as one of the proactive/dynamic defense (or moving target defense) mechanisms, to defend against known-plaintext attacks. 
+We also show the benefits of reducing channel correlation to system security with the proposed metric in Sec. \ref{sec:theory}, which further supports our channel randomization approach.  
+
+\subsection{Channel Prediction}
+When the physical wireless channel remains unchanged, we randomize the wireless channel through rapid antenna mode switching, however, when the main channel changes, a new transmit filter is needed by Alice to guarantee the orthogonality between the message and noise subspaces. Traditionally, the main channel information $\mathbf{H}_{AB}$ is measured at Bob's side and sent back to Alice through an OOB channel or relying on implicit feedback.
+% However, when the channel is randomized frequently, it is to costly for the transceivers to measure channels and get feedback every time, 
+However, when the channel is randomized frequently, it becomes too costly, 
+which makes the channel measurement a major challenge for orthogonal blinding based schemes. To solve this problem, we introduce a compressive sensing based channel prediction algorithm for Alice to cancel the channel changing effect to Bob. 
+
+\subsubsection{AoD Estimation}
+As the physical channel coefficient part is assumed as unchanged within the channel coherent time, it implies a stable AoD distribution correspondingly. To predict the CSI under different antenna modes, the distribution of AoD is estimated first to capture the physical wireless channel, and the effect of the antenna is added as in \eqref{eq:hh} for CSI prediction.
+
+\subsubsection{Conventional AoD Estimation}
+Traditionally, the distribution of AoD is estimated via MUSIC algorithm \cite{schmidt1986multiple}. To simplify, we describe it with a uniform linear array (ULA), with $M$ identical antenna elements arranged along a line with uniform spacing. Assume that there are $L$ multipath signals $S_1,S_2,\dots,S_L$ arriving. The matrix representation of the received signal at the array can be represented as:
+\begin{equation}
+    \mathbf{J} = \mathbf{A}\mathbf{S} + \mathbf{N} \label{eqJ}
+\end{equation}
+where $\mathbf{J}$ is the $M \times 1$ received signal, $\mathbf{S}$ is the $L \times 1$ signal source and $\mathbf{A}$ is the $M \times L$ steering vector matrix.
+
+The basic idea of MUSIC algorithm is to implement eigenvalue decomposition of the received signal covariance matrix:
+\begin{align}
+    \mathbf{\Phi}_J & = E[\mathbf{J}\mathbf{J}^H] \label{eqRJ} \\
+           & = \mathbf{A}\mathbf{\Phi}_S\mathbf{A}^H+\mathbf{\Phi}_N \label{eqRJ2}\\
+           & = \mathbf{Q}_S\sum {\mathbf{Q}_S}^H+\mathbf{Q}_N\sum {\mathbf{Q}_N}^H
+\end{align}
+where $\mathbf{\Phi}_S$ and $\mathbf{\Phi}_N$ are the correlation matrix for the signal and noise respectively. Decomposing \eqref{eqRJ2} results in $M$ eigen values out of which the larger $L$ eigenvalues correspond to the multipath signals, where $\mathbf{Q}_S$ and $\mathbf{Q}_N$ are the basis of signal and noise subspaces respectively. Then by exploiting the orthogonality between the signal and noise subspaces, the direction of the arrived angles can be represented as:
+\begin{equation}
+    \theta_{MUSIC} = \text{argmin}~ \boldsymbol{\beta}^H(\theta)\mathbf{Q}_N{\mathbf{Q}_N}^H\boldsymbol{\beta}(\theta)
+\end{equation}
+% which is equivalent to obtain peaks in the spectral estimation:
+% \begin{equation}
+%     P_{MUSIC}=\frac{1}{\boldsymbol{\beta}^H(\theta)\mathbf{Q}_N{\mathbf{Q}_N}^H\boldsymbol{\beta}(\theta)}
+% \end{equation}
+
+However, as the MUSIC algorithm was mainly proposed for radio direction finding, the distribution obtained from it is only about the magnitude of CSI, which is not the AoD distribution we need. 
+Hence, this algorithm is not applicable to our problem.
+% Hence the traditional MUSIC algorithm is not applicable to our problem.
+
+\subsubsection{Compressive AoD Estimation with RA}
+Intuitively, the easiest way to estimate the AoD distribution for a given channel is to transmit with $D$ different antenna modes, so that we can solve \eqref{eq:hh} directly. However, it is not practical to estimate through this linear algebra approach due to large $D$ (e.g. in our case $D = 360$). Fortunately, by exploiting the sparsity of AoD distribution, the problem is solvable even with a small number of training modes. 
+
+% The first step of channel prediction is the AoD distribution estimation, where Alice transmits pilots to Bob with a certain number of training antenna modes, and Bob sends the measured CSI back to Alice. With the known antenna profile and the corresponding CSI, Alice is able to obtain the AoD distribution by solving the linear algebra problem expressed as  \eqref{eq:hCS}. Since $a(\theta)$ is a vector of length $D$, it is only recoverable when we have $D$ different measurements of $H^{(u)}$. However, it is not practical to estimate AoD distribution through linear algebra approach due to large $D$ (e.g. in our case $D = 360$). Fortunately, by exploiting the sparsity of AoD distribution, the problem is solvable even with a small number of training modes.
+
+Previous works \cite{ghassemzadeh2004measurement,czink2007cluster} have shown that for a typical multipath environment, there are only 3-5 distinct directions are dominant components. In other words, when we look into the AoD distribution, only a small number of them contribute significantly to the CSI. With this sparsity property, we can recover the AoD distribution from only a small number of measurements. Specifically, we use compressive sensing technique \cite{candes2008introduction} to estimate AoD distribution. 
+
+Compressive sensing is a sampling algorithm that capable of recovering sparse signals with much fewer samples than traditional sampling approaches. One of the basic problems is to recover a signal $\mathbf{x}$ from a $M \times 1$ observation $\mathbf{y}$, with a given $M \times N$ sensing basis $\mathbf{\Phi}$, where $M < N$ and the signal $\mathbf{x}$ has a sparse representation with a $N \times N$ representation basis $\mathbf{\Psi}$ and $N \times 1$ weighting coefficients $\mathbf{s}$: $\mathbf{x} = \mathbf{\Psi s}$.  Mathematically speaking, the problem is to get $\mathbf{x}$/$\mathbf{s}$ from    
+$\mathbf{y} = \mathbf{\Phi x} = \mathbf{\Phi \Psi s}$. The problem is solvable when the largest correlation between any two elements of $\mathbf{\Phi}$ and $\mathbf{\Psi}$ is small, which is refereed to as incoherence \cite{candes2008introduction}.
+
+For our problem, since the AoD distribution $\mathbf{a(\cdot)}$ is sparse itself, our presentation basis degrades to an identity matrix, but we can still use the compressive sensing formulation to solve it. When training modes are randomly selected, the incoherence condition is roughly satisfied and the AoD distribution of $(i,j)$-th receive-transmit channel can be recovered from the following compressive sensing formulation: 
+\begin{align}
+    \begin{split}
+        \mathbf{a}_{i,j} & = \text{argmin}~||\mathbf{a}_{i,j}(\mathbf{\theta})||_1\\
+        \text{s.t.}~ h_{i,j}(u) & = \sum\limits_{d = 1}^{D} G(u,\theta_d)\mathbf{a}_{i,j}(\theta_d), \quad 1\leq u \leq U
+    \end{split}
+\label{eq:CS_formulation}
+\end{align}
+where $\| \cdot \|_1$ represents the L1 norm and $U \ll D$ are the total number of antenna modes needed for AoD distribution recovery. Note that, Xie et al. presented an estimation algorithm of AoA distribution based on compressive sensing in \cite{xie2015hekaton}. However, since they use antenna array, the CSI they use for estimation is the composite CSI instead of the one between each receive-transmit antenna pair. 
+% Besides, similar to  MUSIC, their AoA distribution only computes the magnitude of the CSI.
+
+\subsubsection{Channel Prediction}
+Once the AoD distribution is estimated with the above compressive sensing formulation, the CSI $h_{i,j}$ under any given antenna mode can be predicted with  \eqref{eq:hh}. When the AoD distribution of every CSI element in the main channel is estimated, the whole matrix $\mathbf{H}_{AB}$ can be predicted correspondingly. Note that, the physical wireless channel is stable only within the channel coherent time, once the physical channel changes, a new round of AoD distribution estimation is required. In practice, since carrier frequency offset or accurate external clocks such as GPS clocks can eliminate the impact of frequency and phase offset, the channel coherent time can be long. Then the channel prediction is applicable, and it reduces the overhead for channel sounding comparing with the orthogonal blinding scheme.
+
+\subsection{Secure Transmission Scheme}
+In short, our RA based secure transmission scheme comprises two phases that we summarize hereunder, and for clarification, we denote the set of whole antenna modes, training modes, and transmitting modes as $\mathcal{S}$, $\mathcal{S}_1$, $\mathcal{S}_2$ respectively.
+
+1. \textbf{Training phase}: 
+ (a) Alice selects a certain number of antenna modes as training modes ($\mathcal{S}_1$). For each training mode $u \in \mathcal{S}_1$, several pilots are sent for each receive-transmit antenna pair $(i,j)$ with time-division multiplexing;
+ 
+ (b) Bob measures the corresponding CSI $h_{i,j}(u)$ and shares it with Alice through OOB or implicit feedback;
+ 
+  (c) Alice estimates the corresponding AoD distribution following \eqref{eq:CS_formulation} and gets $\mathbf{a}_{i,j}$.
+
+2. \textbf{Secure transmission phase}:
+(a) Alice randomly selects a set of antenna modes from the complement of $\mathcal{S}_1$ as transmitting modes ($\mathcal{S}_2 \subseteq \mathcal{S} \backslash \mathcal{S}_1$);
+
+(b)  For each transmitting mode $v \in \mathcal{S}_2$, Alice predicts the corresponding channel matrix to Bob as $\hat{\mathbf{H}}_{AB}(v)$ following \eqref{eq:hh}, then the transmit filter $\mathbf{F}_A$ is computed based on the predicted $\hat{\mathbf{H}}_{AB}(v)$ following \eqref{eq:F_A};
+        
+(c) Alice transmits the message $\mathbf{D}_B$ and AN as in \eqref{eq:data}. For each packet, Alice uses a different mode randomly chosen from above, and Bob demodulates/decodes the received signal to get the messages from the packets directly.
+ %   \end{enumerate}
+%\end{enumerate}
+
+Note that, the training phase needs to be executed once for every channel coherent time period (which is inversely proportional to the maximum Doppler spread of the physical channel). During the secure transmission phase, Alice does not need to include any pilots/preamble in the packets due to the transmit filter that cancels the channel effect to Bob. 
